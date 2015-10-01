@@ -14,14 +14,13 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class ApiController extends FOSRestController
 {
     /**
-     * Return the current temperature (in celsius) in budapest
+     * Return the current temperature (in celsius) in Budapest
      * Route: /api/current_temperature
      * Method: GET
      * -----------
      * @Rest\View
      * @Route("/api/current_temperature")
      */
-
     public function getCurrentTemperatureAction() {
         $jsonurl = "http://api.openweathermap.org/data/2.5/weather?q=Budapest,hu";
         $json = file_get_contents($jsonurl);
@@ -40,36 +39,40 @@ class ApiController extends FOSRestController
             array('Content-Type' => 'application/json')
         );
     }
-    
-    /*
-     * 
-     * 
-     * POST /email_temperature
-
-        Send the current temperature to the specified email address 
-     * Body Params
-
--to : recipient email address
-     * 
-     *     Example response :
-        Code: 200
-        Content: { status : 'ok' }
+       
+    /**
+     * Send the current temperature to the specified email address 
+     * Method: POST
+     * -----------
+     * @Rest\View
+     * @Route("/api/email_temperature/{to}")
      */
+    public function postEmailTemperatureAction($to) {
+        $data = array(
+            'status' => 'OK'
+        );
+        
+        return new Response(
+            json_encode($data),
+            200,
+            array('Content-Type' => 'application/json'));
+    }
     
-    
-    /*
-     * POST /subscribe_temperature
-
-Send the current temperature to the specified email address in every hour
-
-    Body Params
-
-    -to : recipient email address
-
-    Example response :
-        Code: 200
-        Content: { status : 'ok' }
-
+    /**
+     * Send the current temperature to the specified email address in every hour
+     * Method: POST
+     * -----------
+     * @Rest\View
+     * @Route("/api/subscribe_temperature/{to}")
      */
-
+    public function postSubscribeTemperatureAction($to) {
+        $data = array(
+            'status' => 'OK'
+        );
+        
+        return new Response(
+            json_encode($data),
+            200,
+            array('Content-Type' => 'application/json'));
+    }    
 }
