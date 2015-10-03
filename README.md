@@ -80,3 +80,4 @@ When everything is up and running, follow these steps [read first, act later!]:
 * The CronTaskRunCommand class needs heavy refactoring. I just copypasted code from the API controller, to speed things up.    
 * Having those 2 tables in the database might also be redundant.    
 * ToDo: Writing tests.    
+* ToDo: Use better and more exception handling.
