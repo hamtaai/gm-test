@@ -129,7 +129,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
         $currTemp = $this->getCurrentTemperature()["message"];
         $msg = "Hello, " . $to . "!\n"
             . "\nThank you for " . trim($why) . " the API."
-            . "\nThe temperature in budapest is currently $currTemp degree celsius.";
+            . "\nThe temperature in Budapest is currently $currTemp degree celsius.";
 
         return $msg;
     }
