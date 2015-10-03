@@ -78,4 +78,5 @@ When everything is up and running, follow these steps [read first, act later!]:
 ##Other notes    
 * I wrote the project in symfony, because i'm the most comfortable with this framework. If required, I will rewrite it in Laravel.    
 * The CronTaskRunCommand class needs heavy refactoring. I just copypasted code from the API controller, to speed things up.    
+* Having those 2 tables in the database might also be redundant.    
 * ToDo: Writing tests.    
