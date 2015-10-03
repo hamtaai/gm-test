@@ -14,7 +14,8 @@ Emails:
 * Sending emails is achieved with SwiftMail.
 * Usage:
  - Send the request to the API
- - Use this command in the command-line:    php app/console swiftmailer:spool:send --env=dev
+ - ~~Use this command in the command-line:    php app/console swiftmailer:spool:send --env=dev~~
+ - Note: Spooling has been disabled, emails should go through automatically.
 
 * Notes
  - I use Mandrill as my mail server.

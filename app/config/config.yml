@@ -78,9 +78,9 @@ swiftmailer:
     port:      "%mailer_port%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    spool:
-        type: file
-        path: "%kernel.root_dir%/AppBundle/Resources/spool/spool"
+    #spool:
+    #    type: file
+    #    path: "%kernel.root_dir%/AppBundle/Resources/spool/spool"
 
 #FriendsOfSymfony - ReST
 fos_rest:
