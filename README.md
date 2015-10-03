@@ -3,6 +3,7 @@
 ##General:    
 * The application was written in NetBeans 8.0.2 IDE, with PSR-2 coding standard.    
  - Coding standard settings imported from https://github.com/bobsta63/netbeans-psr-formatting    
+* It's built on the Symfony 2.7.5 framework.    
 * Dev. environment:     
  - Windows7 64bit    
  - Apache 2.4.9 (Win64) [Installed from WAMP]    
@@ -20,7 +21,10 @@ When everything is up and running, follow these steps:
  2. Open terminal/command line and navigate to the project folder.    
  3. Use mysql -u [user] -p[pass] < Create_Database.sql to prepare the database and tables.    
      * Note: no space is needed between -p and your password.
- 4. Execute the *composer install* command. This will download the dependencies.    
+ 4. Execute the *composer install* command. This will download the dependencies. During the installation, you'll be asked to fill out database and mailer information: 
+     * The database name should be GMTest
+     * For other informations (database host, etc.) use your own settings.
+     * For switmailer you can use your own information or my settings from *Sending information*.
 
 ##Starting the application:    
 * Navigate to the project folder in the terminal (linux) or command line (windows) and excute the command:    
@@ -56,9 +60,9 @@ When everything is up and running, follow these steps:
 * My settings    
  - mailer_transport: smtp    
  - mailer_host: smtp.mandrillapp.com    
- - mailer_port: 587    
  - mailer_user: havelant.mate@gmail.com    
  - mailer_password: dfMdvig0VJkYl-EVxNFhPQ    
+ - mailer_port: 587    
     
 ###Manual sending:    
  - I defined a command in the project: crontasks:run    
