@@ -29,7 +29,7 @@
    * Data type: json
    * Data format: {"to": "email of the recipient"}
 
-3,*current_temperature*
+3, *current_temperature*
    * Method: GET
    * Description: Send the current temperature to the specified email address in every hour.
    * Data type: json
@@ -62,4 +62,5 @@
    - Note: For Windows, you need to use advanced options (in the wizard, if available, or by editing the created task) to be able to run it hourly.
 
 
-
+##Other notes
+* The CronTaskRunCommand class needs heavy refactoring. I just copypasted code from the API controller, to speed things up.
