@@ -15,7 +15,7 @@
 * You also need composer.    
 
 ###Installation    
-When everything is up and running, follow these steps:    
+When everything is up and running, follow these steps [read first, act later!]:    
  1. Download and extract/clone the repo to the desirable folder.    
  2. Open terminal/command line and navigate to the project folder.    
  3. Use mysql -u [user] -p[pass] < Create_Database.sql to prepare the database and tables.    
@@ -76,4 +76,6 @@ When everything is up and running, follow these steps:
 
 
 ##Other notes    
+* I wrote the project in symfony, because i'm the most comfortable with this framework. If required, I will rewrite it in Laravel.    
 * The CronTaskRunCommand class needs heavy refactoring. I just copypasted code from the API controller, to speed things up.    
+* ToDo: Writing tests.    
