@@ -10,7 +10,17 @@
  - MySQL Community Server (GPL) 5.6.17 [Installed from WAMP]    
 
 ##Installation:    
-* TODO    
+###Prerequisites   
+* The application requires WAMP/LAMP to be installed and running.     
+* You also need composer.    
+
+###Installation    
+When everything is up and running, follow these steps:    
+ 1. Download and extract/clone the repo to the desirable folder.    
+ 2. Open terminal/command line and navigate to the project folder.    
+ 3. Use mysql -u [user] -p[pass] < Create_Database.sql to prepare the database and tables.    
+     * Note: no space is needed between -p and your password.
+ 4. Execute the *composer install* command. This will download the dependencies.    
 
 ##Starting the application:    
 * Navigate to the project folder in the terminal (linux) or command line (windows) and excute the command:    
@@ -19,17 +29,17 @@
 * Replace {rest_function_name} in your request with the needed function.    
 
 ##API function list:    
-1, *current_temperature*    
+1. *current_temperature*    
    * Method: GET    
    * Description: Returns the current temperature (in celsius) in Budapest.    
     
-2, *email_temperature*    
+2. *email_temperature*    
    * Method: POST    
    * Description: Sends the current temperature to the specified email address.    
    * Data type: json    
    * Data format: {"to": "email of the recipient"}    
     
-3, *current_temperature*    
+3. *current_temperature*    
    * Method: GET    
    * Description: Send the current temperature to the specified email address in every hour.    
    * Data type: json    
