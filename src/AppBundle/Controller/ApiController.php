@@ -56,7 +56,7 @@ class ApiController extends FOSRestController
         );
 
         if ($form->isValid()) {
-            if ($this->sendEmail($entity->getTo()) !== 0) {
+            if ($this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "using")) !== 0) {
                 $data["code"] = 200;
                 $data["status"] = "OK";
             } else {
@@ -97,6 +97,8 @@ class ApiController extends FOSRestController
                     $em->flush();
                     $data["code"] = 200;
                     $data["status"] = "OK";
+
+                    $this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "subscribing to"));
                 } else {
                     $data["code"] = 422;
                     $data["status"] = "There's already a subscription with the given email address!";
@@ -121,13 +123,8 @@ class ApiController extends FOSRestController
         return false;
     }
 
-    private function sendEmail($to)
+    private function sendEmail($to, $mailMsg)
     {
-        $currTemp = $this->getCurrentTemperature()["message"];
-        $mailMsg = "Hello, " . $to . "!\n"
-            . "\nThank you for using the API."
-            . "\nThe temperature in budapest is currently $currTemp celsius.";
-
         $message = \Swift_Message::newInstance()
             ->setSubject('Budapest Weather')
             ->setFrom(array("havelant.mate@gmail.com" => "Havelant Máté"))
@@ -140,13 +137,13 @@ class ApiController extends FOSRestController
 
         return $this->get('mailer')->send($message);
     }
-    
     /*
      * $unit is a string
      * "metric" returns the current temp. in celsius
      * "imperial" returns the current temp. in fahrenheit
      * any other value returns the current temp. in kelvin
      */
+
     private function getCurrentTemperature($unit = "metric")
     {
         $units = "";
@@ -182,5 +179,15 @@ class ApiController extends FOSRestController
         }
 
         return $retData;
+    }
+
+    private function emailMsgFactory($to, $why)
+    {
+        $currTemp = $this->getCurrentTemperature()["message"];
+        $msg = "Hello, " . $to . "!\n"
+            . "\nThank you for ".trim($why)." the API."
+            . "\nThe temperature in budapest is currently $currTemp degree celsius.";
+        
+        return $msg;
     }
 }
