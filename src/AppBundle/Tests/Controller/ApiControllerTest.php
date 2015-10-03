@@ -30,14 +30,37 @@ class ApiControllerTest extends WebTestCase
         );
     }
 
+    public function testEmailTemperatureValid()
+    {
+        $input = json_encode(array("to" => "havelant.mate@gmail.com"));
+        
+        $this->functionBodyFactory(
+            "Testing /email_temperature (valid data). ", 'POST', '/api/email_temperature', $input, 200
+        );
+    }
+
+    public function testEmailTemperatureInvalid()
+    {
+        $input = json_encode(array("to" => "havelant.mate"));
+        
+        $this->functionBodyFactory(
+            "Testing /email_temperature (invalid data). ", 'POST', '/api/email_temperature', $input, 400
+        );
+    }
+
     private function functionBodyFactory($output_text, $method, $input_url, $input_data, $expected)
     {
         print $output_text;
 
         $crawler = $this->client->request(
-            $method, $input_url, array(), // request params
+            $method, //Method of the request 
+            $input_url, //where to send the request
+            array(), // params
             array(), // files
-            array(), $input_data
+            array(
+                'CONTENT_TYPE' => 'application/json',
+            ), // server
+            $input_data //input data
         );
 
         $this->assertJsonResponse($this->client->getResponse(), $expected);
