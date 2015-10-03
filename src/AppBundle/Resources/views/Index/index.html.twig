@@ -3,7 +3,11 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-            Blank page.
+            <h1 style="text-align:center">Hello and welcome to this application!</h1><br />
+            This is an API to get the current temperature in celsius in Budapest. <br /><br />
+            Send GET requests to <b>/api/current_temperature</b> to recieve the current tempearture in JSON format. <br />
+            Send POST requests to <b>/api/email_temperature</b> with your email address with the format <b>{"to":"your-email-address"}</b> to recieve the current tempearture in email. <br />
+            Send POST requests to <b>/api/subscribe_temperature</b> with your email address with the format <b>{"to":"your-email-address"}</b> to recieve the current tempearture in email every hour. <br />
         </div>
     </div>
 {% endblock %}
