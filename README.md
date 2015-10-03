@@ -1,5 +1,3 @@
-#gm-test
-=======
 ##General:    
 * The application was written in NetBeans 8.0.2 IDE, with PSR-2 coding standard.    
  - Coding standard settings imported from https://github.com/bobsta63/netbeans-psr-formatting    
@@ -12,6 +10,7 @@
 
 ##Installation:    
 ###Prerequisites   
+* The project needs ~60 MB of storage space.
 * The application requires WAMP/LAMP to be installed and running.     
 * You also need composer.    
 
