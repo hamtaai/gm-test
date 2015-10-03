@@ -5,12 +5,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use AppBundle\Entity\Email as Email;
+use AppBundle\Form\RestEmailType;
+use Symfony\Bundle\MonologBundle\SwiftMailer;
 
 class ApiController extends FOSRestController
 {
+
     private $contentType = array('Content-Type' => 'application/json');
 
     /*
@@ -19,7 +23,8 @@ class ApiController extends FOSRestController
      * "imperial" returns the current temp. in fahrenheit
      * any other value returns the current temp. in kelvin
      */
-    private function getCurrentTemperature($unit)
+
+    private function getCurrentTemperature($unit = "metric")
     {
         $units = "";
 
@@ -66,7 +71,7 @@ class ApiController extends FOSRestController
      */
     public function getCurrentTemperatureAction()
     {
-        $data = $this->getCurrentTemperature("metric");
+        $data = $this->getCurrentTemperature();
 
         return new Response(
             json_encode(array(
@@ -85,14 +90,48 @@ class ApiController extends FOSRestController
     public function postEmailTemperatureAction()
     {
         //$to comes from POST
+        $entity = new Email();
+        $form = $this->createForm(new RestEmailType(), $entity);
+        $form->handleRequest($this->getRequest());
 
         $data = array(
-            'status' => 'OK'
+            'code' => 400,
+            'status' => 'Bad request.'
         );
 
+        if ($form->isValid()) {
+            if ($this->sendEmail($entity->getTo()) !== 0) {
+                $data["code"] = 200;
+                $data["status"] = "OK";
+            } else {
+                $data["code"] = 550;
+                $data["status"] = "Sending the email failed.";
+            }
+        }
+
         return new Response(
-            json_encode($data), 200, array('Content-Type' => 'application/json')
+            json_encode(array("status" => $data["status"])), $data["code"], array('Content-Type' => 'application/json')
         );
+    }
+
+    private function sendEmail($to)
+    {
+        $currTemp = $this->getCurrentTemperature()["message"];
+        $mailMsg = "Hello, " . $to . "!\n"
+            . "\nThank you for using the API."
+            . "\nThe temperature in budapest is currently $currTemp celsius.";
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Budapest Weather')
+            ->setFrom(array("havelant.mate@gmail.com" => "Havelant Máté"))
+            ->setTo(array($to => "Receiver"))
+            ->setBody($mailMsg);
+
+        echo "\n-----------------\n";
+        echo $mailMsg;
+        echo "\n-----------------\n";
+
+        return $this->get('mailer')->send($message);
     }
 
     /**
