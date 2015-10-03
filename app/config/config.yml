@@ -80,7 +80,7 @@ swiftmailer:
     port:      "%mailer_port%"      
     spool:
         type: file
-        path: "%kernel.root_dir%/AppBundle/Resources/spool/spool"
+        path: "%kernel.root_dir%/AppBundle/Resources/spool/"
 
 #FriendsOfSymfony - ReST
 fos_rest:
