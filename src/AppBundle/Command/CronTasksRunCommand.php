@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\StringInput;
 
 class CronTasksRunCommand extends ContainerAwareCommand
 {
-
     private $output;
 
     protected function configure()
@@ -85,11 +84,7 @@ class CronTasksRunCommand extends ContainerAwareCommand
             ->setTo(array($to => "Receiver"))
             ->setBody($mailMsg);
 
-        echo "\n-----------------\n";
-        echo $mailMsg;
-        echo "\n-----------------\n";
-
-        return $this->get('mailer')->send($message);
+        return $this->getContainer()->get('mailer')->send($message);
     }
 
     private function getCurrentTemperature($unit = "metric")
