@@ -1,16 +1,12 @@
 <?php namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use AppBundle\Entity\Email as Email;
+use AppBundle\Entity\CronTask as CronTask;
 use AppBundle\Form\RestEmailType;
-use Symfony\Bundle\MonologBundle\SwiftMailer;
 
 class ApiController extends FOSRestController
 {
@@ -56,7 +52,7 @@ class ApiController extends FOSRestController
         );
 
         if ($form->isValid()) {
-            if ($this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "using")) !== 0) {
+            if ($this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "using")) > 0) {
                 $data["code"] = 200;
                 $data["status"] = "OK";
             } else {
@@ -94,11 +90,19 @@ class ApiController extends FOSRestController
                 $em = $this->getDoctrine()->getManager();
                 if ($this->isEmailUnique($em, $entity->getTo())) {
                     $em->persist($entity);
+                                  
+                    $cronEntity = new CronTask();
+                    $cronEntity
+                        ->setName($entity->getTo())
+                        ->setTaskInterval(3600)
+                        ->setLastRun(new \DateTime());
+                    $em->persist($cronEntity);
                     $em->flush();
+                    
+                    $this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "subscribing to"));
+                                        
                     $data["code"] = 200;
                     $data["status"] = "OK";
-
-                    $this->sendEmail($entity->getTo(), $this->emailMsgFactory($entity->getTo(), "subscribing to"));
                 } else {
                     $data["code"] = 422;
                     $data["status"] = "There's already a subscription with the given email address!";
@@ -130,12 +134,18 @@ class ApiController extends FOSRestController
             ->setFrom(array("havelant.mate@gmail.com" => "Havelant Máté"))
             ->setTo(array($to => "Receiver"))
             ->setBody($mailMsg);
-
+       
         echo "\n-----------------\n";
         echo $mailMsg;
         echo "\n-----------------\n";
 
-        return $this->get('mailer')->send($message);
+        //Return with the number of e-mails sent
+        $sentCount = $this->get('mailer')->send($message);
+        //Send the email by flushing the spool
+        $spool = $this->get('mailer')->getTransport()->getSpool();
+        $spool->flushQueue($this->get('swiftmailer.transport.real'));
+        
+        return $sentCount;
     }
     /*
      * $unit is a string

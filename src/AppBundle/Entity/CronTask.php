@@ -29,13 +29,6 @@ class CronTask
     private $name;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="commands", type="array")
-     */
-    private $commands;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="taskInterval", type="integer")
@@ -81,29 +74,6 @@ class CronTask
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set commands
-     *
-     * @param array $commands
-     * @return CronTask
-     */
-    public function setCommands($commands)
-    {
-        $this->commands = $commands;
-
-        return $this;
-    }
-
-    /**
-     * Get commands
-     *
-     * @return array 
-     */
-    public function getCommands()
-    {
-        return $this->commands;
     }
 
     /**

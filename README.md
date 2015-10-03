@@ -1,31 +1,69 @@
 gm-test
 =======
-
-Notes:
-* Written in NetBeans 8.0.2 IDE, with PSR-2 coding standard.
-* Coding standard settings imported from https://github.com/bobsta63/netbeans-psr-formatting
-* Environment: 
+General:
+* The application was written in NetBeans 8.0.2 IDE, with PSR-2 coding standard.
+ - Coding standard settings imported from https://github.com/bobsta63/netbeans-psr-formatting
+* Dev. environment: 
  - Windows7 64bit
  - Apache 2.4.9 (Win64) [Installed from WAMP]
  - PHP 5.5.12 [Installed from WAMP]
  - MySQL Community Server (GPL) 5.6.17 [Installed from WAMP]
 
-Emails:
-* Sending emails is achieved with SwiftMail.
-* Usage:
- - Send the request to the API
- - ~~Use this command in the command-line:    php app/console swiftmailer:spool:send --env=dev~~
- - Note: Spooling has been disabled, emails should go through automatically.
+Installation:
+* TODO
 
-* Notes
- - I use Mandrill as my mail server.
+Starting the application:
+* Navigate to the project folder in the terminal (linux) or command line (windows) and excute the command:
+    php app/console server:run 
+* Now you can use the api. Base path is 127.0.0.1/api/{rest_function_name}.
+* Replace {rest_function_name} in your request with the needed function.
+
+API function list:
+1, * Name: current_temperature
+   * Method: GET
+   * Description: Returns the current temperature (in celsius) in Budapest.
+
+2, * Name: email_temperature
+   * Method: POST
+   * Description: Sends the current temperature to the specified email address.
+   * Data type: json
+   * Data format: {"to": "email of the recipient"}
+
+3, * Name: current_temperature
+   * Method: GET
+   * Description: Send the current temperature to the specified email address in every hour.
+   * Data type: json
+   * Data format: {"to": "email of the subscriber"}
+
+Using cURL to send requests to the API:
+    Get:
+        curl -i -H "Accept: application/json" http://localhost:8000/api/current_temperature
+    Send:
+        curl -i -H "Content-Type:application/json" -X POST http://localhost:8000/api/email_temperature -d '{"to":"havelant.mate@gmail.com"}'
+    Subscribe:
+        curl -i -H "Content-Type:application/json" -X POST http://localhost:8000/api/subscribe_temperature -d '{"to":"havelant.mate@gmail.com"}'
+
+Sending information:
+* Sending emails is achieved with SwiftMail.
+* I use Mandrill as my mail server.
+* My settings
  - mailer_transport: smtp
  - mailer_host: smtp.mandrillapp.com
  - mailer_port: 587
  - mailer_user: havelant.mate@gmail.com
  - mailer_password: dfMdvig0VJkYl-EVxNFhPQ
 
-Tests with cURL:
-    curl -i -H "Accept: application/json" http://localhost:8000/api/current_temperature
-    curl -i -H "Content-Type:application/json" -X POST http://localhost:8000/api/email_temperature -d '{"to":"havelant.mate@gmail.com"}'
+* Manual sending:
+ - I defined a command in the project: crontasks:run
+ - In the terminal (linux) or command line (windows) go to the project folder, and execute: php app/console crontasks:run
+ - If the email for the subscriber is expected to be sent, the the command will send it. Otherwise the email is skipped.
+
+* Automate sending
+ - When using the email_temperature or subscribe_temperature methods, the recipient automatically gets a response mail.
+ - To automate the e-mail sending we need to add the command crontasks:run
+   - as a Cron job on Linux, that gets executed once every hour. ( See http://www.adminschoice.com/crontab-quick-reference )
+   - as a Scheduled Task on Windows. ( See http://windows.microsoft.com/en-au/windows/schedule-task#1TC=windows-7 )
+   - Note: For Windows, you need to use advanced options (in the wizard, if available, or by editing the created task) to be able to run it hourly.
+
+
 
