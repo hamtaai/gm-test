@@ -13,7 +13,7 @@
 * The project needs ~60 MB of storage space.
 * The application requires WAMP/LAMP to be installed and running.     
 * You also need composer.    
-* For testing I used PHPUnit (phpunit.phar included in the repo).
+* For testing I used PHPUnit (phpunit.phar v4.8.10 included in the repo).
 
 ###Installation    
 When everything is up and running, follow these steps [read first, act later!]:    
