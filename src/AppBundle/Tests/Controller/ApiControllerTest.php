@@ -32,7 +32,7 @@ class ApiControllerTest extends WebTestCase
 
     public function testEmailTemperatureValid()
     {
-        $input = json_encode(array("to" => "havelant.mate@gmail.com"));
+        $input = json_encode(array("to" => "template.name@test.rest"));
         
         $this->functionBodyFactory(
             "Testing /email_temperature (valid data). ", 'POST', '/api/email_temperature', $input, 200
@@ -41,7 +41,7 @@ class ApiControllerTest extends WebTestCase
 
     public function testEmailTemperatureInvalid()
     {
-        $input = json_encode(array("to" => "havelant.mate"));
+        $input = json_encode(array("to" => "template.name"));
         
         $this->functionBodyFactory(
             "Testing /email_temperature (invalid data). ", 'POST', '/api/email_temperature', $input, 400
