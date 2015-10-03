@@ -32,8 +32,9 @@ class ApiControllerTest extends WebTestCase
 
     public function testEmailTemperatureValid()
     {
-        $input = json_encode(array("to" => "template.name@test.rest"));
-        
+        $email = "template.name@test.rest";
+        $input = json_encode(array("to" => $email));
+
         $this->functionBodyFactory(
             "Testing /email_temperature (valid data). ", 'POST', '/api/email_temperature', $input, 200
         );
@@ -41,11 +42,35 @@ class ApiControllerTest extends WebTestCase
 
     public function testEmailTemperatureInvalid()
     {
-        $input = json_encode(array("to" => "template.name"));
-        
+        $email = "template.name";
+        $input = json_encode(array("to" => $email));
+
         $this->functionBodyFactory(
             "Testing /email_temperature (invalid data). ", 'POST', '/api/email_temperature', $input, 400
         );
+    }
+
+    public function testSubscribeTemperatureValid()
+    {
+        $email = "template.name@test.rest";
+        $input = json_encode(array("to" => $email));
+
+        $this->functionBodyFactory(
+            "Testing /subscribe_temperature (valid data). ", 'POST', '/api/subscribe_temperature', $input, 200
+        );
+    }
+
+    public function testSubscribeTemperatureValidAgain()
+    {
+        $email = "template.name@test.rest";
+        $input = json_encode(array("to" => $email));
+
+        $this->functionBodyFactory(
+            "Testing /subscribe_temperature (same-as-before valid data). ", 'POST', '/api/subscribe_temperature', $input, 422
+        );
+
+        //Cleanup
+        $this->removeEmailFromDatabase($email);
     }
 
     private function functionBodyFactory($output_text, $method, $input_url, $input_data, $expected)
@@ -58,12 +83,44 @@ class ApiControllerTest extends WebTestCase
             array(), // params
             array(), // files
             array(
-                'CONTENT_TYPE' => 'application/json',
+            'CONTENT_TYPE' => 'application/json',
             ), // server
             $input_data //input data
         );
 
         $this->assertJsonResponse($this->client->getResponse(), $expected);
+    }
+
+    private function removeEmailFromDatabase($email)
+    {
+        $kernel = $this->createKernel();
+        $kernel->boot();
+
+        /* @var $em \Doctrine\ORM\EntityManager */
+        $em = $kernel->getContainer()
+            ->get('doctrine')
+            ->getEntityManager();
+
+        //Remove from email table
+        $repo = $em->getRepository('AppBundle:Email');
+
+        foreach ($repo->findAll() as $entity) {
+            if ($entity->getTo() == $email) {
+                $em->remove($entity);
+            }
+        }
+
+        //Remove from crontasks
+        $repo = $em->getRepository('AppBundle:CronTask');
+
+        foreach ($repo->findAll() as $entity) {
+            if ($entity->getName() == $email) {
+                $em->remove($entity);
+            }
+        }
+
+        //Apply changes
+        $em->flush();
     }
 
     protected function assertJsonResponse($response, $statusCode = 200)
