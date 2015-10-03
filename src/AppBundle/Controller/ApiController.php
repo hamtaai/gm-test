@@ -134,10 +134,6 @@ class ApiController extends FOSRestController
             ->setFrom(array("havelant.mate@gmail.com" => "Havelant Máté"))
             ->setTo(array($to => "Receiver"))
             ->setBody($mailMsg);
-       
-        echo "\n-----------------\n";
-        echo $mailMsg;
-        echo "\n-----------------\n";
 
         //Return with the number of e-mails sent
         $sentCount = $this->get('mailer')->send($message);
