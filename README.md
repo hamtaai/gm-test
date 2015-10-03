@@ -13,6 +13,7 @@
 * The project needs ~60 MB of storage space.
 * The application requires WAMP/LAMP to be installed and running.     
 * You also need composer.    
+* For testing I used PHPUnit.
 
 ###Installation    
 When everything is up and running, follow these steps [read first, act later!]:    
@@ -75,9 +76,15 @@ When everything is up and running, follow these steps [read first, act later!]:
    - Note: For Windows, you need to use advanced options (in the wizard, if available, or by editing the created task) to be able to run it hourly.    
 
 
+###Automatic tests    
+* All three functions (are going to) have unit tests.
+* Navigate to the projectfolder, and execute *php phpunit.phar -c app* to run all tests.
+* Execute *php phpunit.phar -c app --coverage-html chtml* to also get the coverage analysis of the tests.
+* The coverage is generated to ../ProjectFolder/chtml and you can view it by opening the index.html in your browser.
+* Note: Since some parts of the code require the used weather API to be unavailable, 100% coverage is unlikely.
+
 ##Other notes    
 * I wrote the project in symfony, because i'm the most comfortable with this framework. If required, I will rewrite it in Laravel.    
 * The CronTaskRunCommand class needs heavy refactoring. I just copypasted code from the API controller, to speed things up.    
 * Having those 2 tables in the database might also be redundant.    
-* ToDo: Writing tests.    
 * ToDo: Use better and more exception handling.
