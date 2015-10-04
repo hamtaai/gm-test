@@ -78,7 +78,7 @@ When everything is up and running, follow these steps [read first, act later!]:
 
 ###Automatic tests    
 * **Important!** For running the tests, please restart the server in test mode: **php app/console server:run --env=test**
-* All three functions (are going to) have unit tests.
+* All three functions have unit tests.
 * Navigate to the projectfolder, and execute **php phpunit.phar -c app** to run all tests.
 * Execute **php phpunit.phar -c app --coverage-html chtml** to also get the coverage analysis of the tests.
 * The coverage is generated to ../ProjectFolder/chtml and you can view it by opening the index.html in your browser.
